@@ -1,7 +1,7 @@
 'use client';
 
 import { TableCell, TableRow } from '@/components/ui/table';
-import { Campaign } from '@prisma/client';
+import type { Campaign } from '@prisma/client';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { MoreHorizontal } from 'lucide-react';
