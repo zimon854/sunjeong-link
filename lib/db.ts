@@ -53,6 +53,24 @@ export const influencers = pgTable('influencers', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// 상품 상태 enum
+export const productStatusEnum = pgEnum('product_status', ['active', 'inactive', 'archived']);
+
+// 상품 테이블
+export const products = pgTable('products', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+  price: integer('price').notNull(),
+  status: productStatusEnum('status').notNull().default('active'),
+  imageUrl: varchar('image_url', { length: 255 }),
+  stock: integer('stock').default(0),
+  availableAt: timestamp('available_at'),
+  isArchived: boolean('is_archived').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // 타입 정의
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
@@ -60,11 +78,14 @@ export type Campaign = typeof campaigns.$inferSelect;
 export type InsertCampaign = typeof campaigns.$inferInsert;
 export type Influencer = typeof influencers.$inferSelect;
 export type InsertInfluencer = typeof influencers.$inferInsert;
+export type Product = typeof products.$inferSelect;
+export type InsertProduct = typeof products.$inferInsert;
 
 // 스키마 정의
 export const insertUserSchema = createInsertSchema(users);
 export const insertCampaignSchema = createInsertSchema(campaigns);
 export const insertInfluencerSchema = createInsertSchema(influencers);
+export const insertProductSchema = createInsertSchema(products);
 
 // 쿼리 함수들
 export async function getCampaigns(
@@ -140,23 +161,6 @@ export async function getInfluencers(
 export async function deleteInfluencerById(id: string) {
   await db.delete(influencers).where(eq(influencers.id, id));
 }
-
-export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived']);
-
-export const products = pgTable('products', {
-  id: text('id').primaryKey(),
-  name: varchar('name', { length: 255 }).notNull(),
-  description: text('description'),
-  price: integer('price').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-  status: statusEnum('status').default('active').notNull(),
-  isArchived: boolean('is_archived').default(false).notNull()
-});
-
-export type Product = typeof products.$inferSelect;
-export type InsertProduct = typeof products.$inferInsert;
-export const insertProductSchema = createInsertSchema(products);
 
 export async function getProducts(
   search?: string,

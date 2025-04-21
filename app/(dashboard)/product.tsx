@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,51 +12,32 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { SelectProduct } from '@/lib/db';
+import type { Product } from '@/lib/db';
 import { deleteProduct } from './actions';
 
-export function Product({ product }: { product: SelectProduct }) {
+interface ProductProps {
+  product: Product;
+}
+
+export function Product({ product }: ProductProps) {
   return (
-    <TableRow>
-      <TableCell className="hidden sm:table-cell">
-        <Image
-          alt="Product image"
-          className="aspect-square rounded-md object-cover"
-          height="64"
-          src={product.imageUrl}
-          width="64"
-        />
-      </TableCell>
-      <TableCell className="font-medium">{product.name}</TableCell>
-      <TableCell>
-        <Badge variant="outline" className="capitalize">
-          {product.status}
-        </Badge>
-      </TableCell>
-      <TableCell className="hidden md:table-cell">{`$${product.price}`}</TableCell>
-      <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
-      <TableCell className="hidden md:table-cell">
-        {product.availableAt.toLocaleDateString("en-US")}
-      </TableCell>
-      <TableCell>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>
-              <form action={deleteProduct}>
-                <button type="submit">Delete</button>
-              </form>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TableCell>
-    </TableRow>
+    <div className="flex items-center space-x-4">
+      <img
+        src={product.imageUrl || '/placeholder.png'}
+        alt={product.name}
+        className="h-12 w-12 rounded-full"
+      />
+      <div>
+        <h3 className="text-sm font-medium">{product.name}</h3>
+        <p className="text-sm text-gray-500">
+          {product.stock} in stock
+          {product.availableAt && (
+            <span className="ml-2">
+              Available from {new Date(product.availableAt).toLocaleDateString()}
+            </span>
+          )}
+        </p>
+      </div>
+    </div>
   );
 }
