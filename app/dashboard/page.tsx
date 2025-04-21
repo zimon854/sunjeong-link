@@ -1,14 +1,14 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Users, ShoppingBag, TrendingUp, DollarSign } from 'lucide-react';
+import { Users, ShoppingCart, TrendingUp, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const stats = [
   {
     name: '활성 캠페인',
     value: '12',
-    icon: ShoppingBag,
+    icon: ShoppingCart,
     change: '+2.1%',
     changeType: 'positive',
   },
