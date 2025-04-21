@@ -9,8 +9,10 @@ import {
   varchar,
   integer,
   boolean,
+  pgEnum,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
+import { eq, sql } from 'drizzle-orm';
 
 export const db = drizzle(neon(process.env.POSTGRES_URL!));
 
@@ -24,14 +26,18 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// 캠페인 상태 enum
+export const campaignStatusEnum = pgEnum('campaign_status', ['draft', 'pending', 'active', 'completed', 'cancelled']);
+
 // 캠페인 테이블
 export const campaigns = pgTable('campaigns', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: varchar('title', { length: 255 }).notNull(),
   description: text('description'),
   budget: integer('budget'),
-  status: varchar('status', { length: 50 }).notNull().default('draft'),
+  status: campaignStatusEnum('status').notNull().default('draft'),
   brandId: uuid('brand_id').notNull(),
+  imageUrl: varchar('image_url', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -46,6 +52,94 @@ export const influencers = pgTable('influencers', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+// 타입 정의
+export type User = typeof users.$inferSelect;
+export type InsertUser = typeof users.$inferInsert;
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = typeof campaigns.$inferInsert;
+export type Influencer = typeof influencers.$inferSelect;
+export type InsertInfluencer = typeof influencers.$inferInsert;
+
+// 스키마 정의
+export const insertUserSchema = createInsertSchema(users);
+export const insertCampaignSchema = createInsertSchema(campaigns);
+export const insertInfluencerSchema = createInsertSchema(influencers);
+
+// 쿼리 함수들
+export async function getCampaigns(
+  search?: string,
+  offset: number = 0
+): Promise<{
+  campaigns: Campaign[];
+  newOffset: number | null;
+  totalCampaigns: number;
+}> {
+  if (search) {
+    const result = await db.select().from(campaigns).where(
+      sql`${campaigns.title} ilike ${`%${search}%`}`
+    );
+    return {
+      campaigns: result,
+      newOffset: null,
+      totalCampaigns: result.length
+    };
+  }
+
+  const [totalResult, moreCampaigns] = await Promise.all([
+    db.select({ count: sql<number>`count(*)` }).from(campaigns),
+    db.select().from(campaigns).limit(5).offset(offset)
+  ]);
+
+  const newOffset = moreCampaigns.length >= 5 ? offset + 5 : null;
+
+  return {
+    campaigns: moreCampaigns,
+    newOffset,
+    totalCampaigns: totalResult[0].count
+  };
+}
+
+export async function deleteCampaignById(id: string) {
+  await db.delete(campaigns).where(eq(campaigns.id, id));
+}
+
+export async function getInfluencers(
+  search?: string,
+  offset: number = 0
+): Promise<{
+  influencers: Influencer[];
+  newOffset: number | null;
+  totalInfluencers: number;
+}> {
+  if (search) {
+    const result = await db.select().from(influencers).where(
+      sql`${influencers.category} ilike ${`%${search}%`}`
+    );
+    return {
+      influencers: result,
+      newOffset: null,
+      totalInfluencers: result.length
+    };
+  }
+
+  const [totalResult, moreInfluencers] = await Promise.all([
+    db.select({ count: sql<number>`count(*)` }).from(influencers),
+    db.select().from(influencers).limit(5).offset(offset)
+  ]);
+
+  const newOffset = moreInfluencers.length >= 5 ? offset + 5 : null;
+
+  return {
+    influencers: moreInfluencers,
+    newOffset,
+    totalInfluencers: totalResult[0].count
+  };
+}
+
+export async function deleteInfluencerById(id: string) {
+  await db.delete(influencers).where(eq(influencers.id, id));
+}
 
 export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived']);
 
@@ -99,47 +193,6 @@ export async function getProducts(
 
 export async function deleteProductById(id: string) {
   await db.delete(products).where(eq(products.id, id));
-}
-
-export async function getCampaigns(
-  search: string,
-  offset: number
-): Promise<{
-  campaigns: any[];
-  newOffset: number | null;
-  totalCampaigns: number;
-}> {
-  if (search) {
-    const campaigns = await db.select().from(this.campaigns).where(
-      sql`${this.campaigns.title} ilike ${sql(search)}`
-    );
-    return {
-      campaigns,
-      newOffset: null,
-      totalCampaigns: campaigns.length
-    };
-  }
-
-  if (offset === null) {
-    return { campaigns: [], newOffset: null, totalCampaigns: 0 };
-  }
-
-  const [totalCampaigns, moreCampaigns] = await Promise.all([
-    db.select(sql`count(*)`).from(this.campaigns),
-    db.select().from(this.campaigns).limit(5).offset(offset)
-  ]);
-
-  const newOffset = moreCampaigns.length >= 5 ? offset + 5 : null;
-
-  return {
-    campaigns: moreCampaigns,
-    newOffset,
-    totalCampaigns: totalCampaigns[0].count
-  };
-}
-
-export async function deleteCampaignById(id: string) {
-  await db.delete(this.campaigns).where(eq(this.campaigns.id, id));
 }
 
 // 임시 데이터 저장소

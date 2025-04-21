@@ -1,7 +1,7 @@
 'use client';
 
 import { TableCell, TableRow } from '@/components/ui/table';
-import type { Campaign } from '@prisma/client';
+import type { Campaign } from '@/lib/db';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { MoreHorizontal } from 'lucide-react';
@@ -14,7 +14,11 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-export function Campaign({ campaign }: { campaign: Campaign & { user: any } }) {
+interface CampaignProps {
+  campaign: Campaign;
+}
+
+export function Campaign({ campaign }: CampaignProps) {
   return (
     <TableRow>
       <TableCell className="hidden sm:table-cell">
@@ -52,13 +56,13 @@ export function Campaign({ campaign }: { campaign: Campaign & { user: any } }) {
         </div>
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {campaign.budget.toLocaleString()}원
+        {campaign.budget?.toLocaleString()}원
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {campaign.user?.name || '미지정'}
+        {campaign.brandId}
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {formatDistanceToNow(new Date(campaign.createdAt), {
+        {campaign.createdAt && formatDistanceToNow(new Date(campaign.createdAt), {
           addSuffix: true,
           locale: ko
         })}
