@@ -1,8 +1,9 @@
-'use client';
-
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
-import { SessionProvider } from 'next-auth/react';
+import { Providers } from './providers';
+import { metadata } from './metadata';
+
+export { metadata };
 
 export default function RootLayout({
   children
@@ -12,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="flex min-h-screen w-full flex-col">
-        <SessionProvider>
+        <Providers>
           <header className="border-b">
             <div className="container mx-auto px-4 py-4">
               <h1 className="text-3xl font-bold tracking-tight">
@@ -24,7 +25,7 @@ export default function RootLayout({
             {children}
           </main>
           <Analytics />
-        </SessionProvider>
+        </Providers>
       </body>
     </html>
   );

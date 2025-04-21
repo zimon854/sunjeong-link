@@ -9,8 +9,23 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
+
+  const handleSignIn = async () => {
+    try {
+      await signIn('github', { 
+        callbackUrl: '/',
+        redirect: true
+      });
+    } catch (error) {
+      console.error('로그인 에러:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-start md:items-center p-8">
       <Card className="w-full max-w-sm">
@@ -18,12 +33,17 @@ export default function LoginPage() {
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
             This demo uses GitHub for authentication.
+            {error && (
+              <p className="text-red-500 mt-2">
+                Authentication failed. Please try again.
+              </p>
+            )}
           </CardDescription>
         </CardHeader>
         <CardFooter>
           <Button 
             className="w-full" 
-            onClick={() => signIn('github', { callbackUrl: '/' })}
+            onClick={handleSignIn}
           >
             Sign in with GitHub
           </Button>
