@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -6,7 +8,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { signIn } from '@/lib/auth';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   return (
@@ -19,17 +21,12 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <form
-            action={async () => {
-              'use server';
-              await signIn('github', {
-                redirectTo: '/'
-              });
-            }}
-            className="w-full"
+          <Button 
+            className="w-full" 
+            onClick={() => signIn('github', { callbackUrl: '/' })}
           >
-            <Button className="w-full">Sign in with GitHub</Button>
-          </form>
+            Sign in with GitHub
+          </Button>
         </CardFooter>
       </Card>
     </div>
