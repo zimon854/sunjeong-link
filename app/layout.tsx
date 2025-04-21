@@ -1,6 +1,5 @@
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
-import { Providers } from './providers';
 import { metadata } from './metadata';
 
 export { metadata };
@@ -13,19 +12,17 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="flex min-h-screen w-full flex-col">
-        <Providers>
-          <header className="border-b">
-            <div className="container mx-auto px-4 py-4">
-              <h1 className="text-3xl font-bold tracking-tight">
-                SUNJEONGLINK
-              </h1>
-            </div>
-          </header>
-          <main className="flex-1">
-            {children}
-          </main>
-          <Analytics />
-        </Providers>
+        <header className="border-b">
+          <div className="container mx-auto px-4 py-4">
+            <h1 className="text-3xl font-bold tracking-tight">
+              SUNJEONGLINK
+            </h1>
+          </div>
+        </header>
+        <main className="flex-1">
+          {children}
+        </main>
+        <Analytics />
       </body>
     </html>
   );
