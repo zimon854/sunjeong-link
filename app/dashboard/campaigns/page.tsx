@@ -1,6 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import {
   Table,
@@ -14,11 +13,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-export const metadata: Metadata = {
-  title: '캠페인 관리 - 선정링크',
-  description: '캠페인 관리 페이지',
-};
 
 const campaigns = [
   {

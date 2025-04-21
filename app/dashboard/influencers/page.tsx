@@ -1,6 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Instagram, Youtube, Search } from 'lucide-react';
@@ -16,11 +15,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: '인플루언서 - 선정링크',
-  description: '인플루언서 관리 페이지',
-};
 
 const influencers = [
   {
