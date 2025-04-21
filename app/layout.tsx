@@ -1,12 +1,8 @@
+'use client';
+
 import './globals.css';
-
 import { Analytics } from '@vercel/analytics/react';
-import { SessionProvider } from '@/components/session-provider';
-
-export const metadata = {
-  title: 'SUNJEONGLINK - 인플루언서 매칭 플랫폼',
-  description: '소상공인과 브랜드를 위한 인플루언서 매칭 & 콘텐츠 캠페인 자동화 솔루션'
-};
+import { SessionProvider } from 'next-auth/react';
 
 export default function RootLayout({
   children
