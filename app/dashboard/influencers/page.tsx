@@ -4,51 +4,40 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Instagram, Youtube, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 
 const influencers = [
   {
-    id: 1,
-    name: '김인플',
-    handle: '@kiminflu',
-    platform: 'Instagram',
-    followers: '125K',
-    engagement: '4.8%',
-    categories: ['패션', '뷰티'],
-    status: '활성',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'
-  },
-  {
-    id: 2,
-    name: '이크리',
-    handle: '@leecreator',
-    platform: 'YouTube',
-    followers: '250K',
+    id: '1',
+    name: '김뷰티',
+    handle: '@kimbeauty',
+    avatar: '/avatars/01.png',
+    followers: '520K',
     engagement: '5.2%',
-    categories: ['라이프스타일', '여행'],
-    status: '활성',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Molly'
+    categories: ['뷰티', '라이프스타일'],
+    platforms: ['instagram', 'youtube'],
+    recentCampaigns: 3,
   },
   {
-    id: 3,
-    name: '박소셜',
-    handle: '@parksocial',
-    platform: 'Instagram',
-    followers: '85K',
-    engagement: '6.1%',
+    id: '2',
+    name: '푸드리뷰어',
+    handle: '@foodreview',
+    avatar: '/avatars/02.png',
+    followers: '320K',
+    engagement: '4.8%',
     categories: ['푸드', '요리'],
-    status: '검토중',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie'
+    platforms: ['instagram'],
+    recentCampaigns: 2,
+  },
+  {
+    id: '3',
+    name: '여행스타그램',
+    handle: '@travelgram',
+    avatar: '/avatars/03.png',
+    followers: '450K',
+    engagement: '4.5%',
+    categories: ['여행', '라이프스타일'],
+    platforms: ['instagram', 'youtube'],
+    recentCampaigns: 5,
   },
 ];
 
@@ -57,64 +46,62 @@ export default function InfluencersPage() {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">인플루언서</h2>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          인플루언서 추가
-        </Button>
+        <div className="relative w-64">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+          <Input placeholder="인플루언서 검색" className="pl-8" />
+        </div>
       </div>
-      <Card>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>인플루언서</TableHead>
-              <TableHead>플랫폼</TableHead>
-              <TableHead>팔로워</TableHead>
-              <TableHead>참여율</TableHead>
-              <TableHead>카테고리</TableHead>
-              <TableHead>상태</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {influencers.map((influencer) => (
-              <TableRow key={influencer.id}>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarImage src={influencer.avatar} alt={influencer.name} />
-                      <AvatarFallback>{influencer.name[0]}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-medium">{influencer.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {influencer.handle}
-                      </div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>{influencer.platform}</TableCell>
-                <TableCell>{influencer.followers}</TableCell>
-                <TableCell>{influencer.engagement}</TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    {influencer.categories.map((category) => (
-                      <Badge key={category} variant="secondary">
-                        {category}
-                      </Badge>
-                    ))}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={influencer.status === '활성' ? 'default' : 'secondary'}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {influencers.map((influencer) => (
+          <Card key={influencer.id} className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center space-x-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={influencer.avatar} />
+                  <AvatarFallback>{influencer.name[0]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-semibold">{influencer.name}</h3>
+                  <p className="text-sm text-gray-500">{influencer.handle}</p>
+                </div>
+              </div>
+              <div className="flex space-x-1">
+                {influencer.platforms.includes('instagram') && (
+                  <Instagram className="h-5 w-5 text-pink-500" />
+                )}
+                {influencer.platforms.includes('youtube') && (
+                  <Youtube className="h-5 w-5 text-red-500" />
+                )}
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-gray-500">팔로워</p>
+                <p className="font-medium">{influencer.followers}</p>
+              </div>
+              <div>
+                <p className="text-gray-500">참여율</p>
+                <p className="font-medium">{influencer.engagement}</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="flex flex-wrap gap-2">
+                {influencer.categories.map((category) => (
+                  <span
+                    key={category}
+                    className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
                   >
-                    {influencer.status}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
+                    {category}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4 text-sm text-gray-500">
+              최근 {influencer.recentCampaigns}개 캠페인 참여
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 } 
