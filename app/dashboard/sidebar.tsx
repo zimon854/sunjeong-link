@@ -35,7 +35,7 @@ export function Sidebar() {
             <NavItem href="/dashboard/influencers" icon={Users}>
               인플루언서
             </NavItem>
-            <NavItem href="/dashboard/analytics" icon={BarChart}>
+            <NavItem href="/performance" icon={BarChart}>
               성과 분석
             </NavItem>
           </nav>
