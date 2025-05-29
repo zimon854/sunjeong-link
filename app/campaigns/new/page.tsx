@@ -39,12 +39,28 @@ export default function CampaignCreatePage() {
     setError('');
     setLoading(true);
     try {
-      // TODO: 실제 캠페인 생성 API 연동 필요
-      // 예시: /api/campaigns POST
-      setTimeout(() => {
+      const formData = new FormData();
+      formData.append('title', form.title);
+      formData.append('description', form.description);
+      formData.append('budget', form.budget);
+      formData.append('startDate', form.startDate);
+      formData.append('endDate', form.endDate);
+      formData.append('status', form.status);
+      if (form.image) {
+        formData.append('image', form.image);
+      }
+      const res = await fetch('/api/campaigns', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setError(data.error || '캠페인 등록 중 오류가 발생했습니다.');
         setLoading(false);
-        router.push('/campaigns');
-      }, 1000);
+        return;
+      }
+      setLoading(false);
+      router.push('/campaigns');
     } catch (err) {
       setError('캠페인 등록 중 오류가 발생했습니다.');
       setLoading(false);
