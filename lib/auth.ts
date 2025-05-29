@@ -1,4 +1,3 @@
-import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 // import GoogleProvider from "next-auth/providers/google";
 // import KakaoProvider from "next-auth/providers/kakao";
@@ -17,20 +16,20 @@ interface CredentialsAuth {
 
 export const authConfig = {
   providers: [
-    // Credentials({
-    //   name: "credentials",
-    //   credentials: {
-    //     email: { label: "이메일", type: "email" },
-    //     password: { label: "비밀번호", type: "password" }
-    //   },
-    //   async authorize(credentials: any) {
-    //     return {
-    //       id: credentials?.email || "1",
-    //       email: credentials?.email || "test@example.com",
-    //       name: credentials?.email ? credentials.email.split('@')[0] : "test",
-    //     };
-    //   }
-    // })
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: { label: "이메일", type: "email" },
+        password: { label: "비밀번호", type: "password" }
+      },
+      async authorize(credentials: any) {
+        return {
+          id: credentials?.email || "1",
+          email: credentials?.email || "test@example.com",
+          name: credentials?.email ? credentials.email.split('@')[0] : "test",
+        };
+      }
+    })
     // GoogleProvider({
     //   clientId: process.env.GOOGLE_CLIENT_ID!,
     //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -49,17 +48,17 @@ export const authConfig = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (token && session.user) {
         session.user.id = token.id as string;
       }
       return session;
     },
   },
-} satisfies NextAuthConfig; 
+}; 
