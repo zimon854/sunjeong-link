@@ -1,10 +1,22 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Overview } from "./overview"
 import { Analytics } from "./analytics"
 import { Reports } from "./reports"
 
-export function PerformanceDashboard() {
+type FilterState = {
+  startDate: Date | null;
+  endDate: Date | null;
+  device: string | null;
+};
+
+type PerformanceDashboardProps = {
+  filters: FilterState;
+};
+
+export function PerformanceDashboard({ filters }: PerformanceDashboardProps) {
   return (
     <div className="space-y-4">
       <Tabs defaultValue="overview" className="space-y-4">

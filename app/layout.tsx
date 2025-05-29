@@ -1,12 +1,14 @@
-import './globals.css';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/react';
+import './globals.css';
+import { Providers } from '@/components/providers';
+import Navbar from '@/components/navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: '선정링크 - 인플루언서 매칭 & 캠페인 자동화',
-  description: '소상공인과 브랜드를 위한 인플루언서 매칭 & 콘텐츠 캠페인 자동화 솔루션',
+export const metadata: Metadata = {
+  title: '선정링크 - 마케팅 성과 분석 플랫폼',
+  description: '마케팅 캠페인의 성과를 분석하고 최적화하는 플랫폼',
 };
 
 export default function RootLayout({
@@ -15,10 +17,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className="h-full">
-      <body className={`${inter.className} h-full`}>
-        {children}
-        <Analytics />
+    <html lang="ko">
+      <body className={inter.className}>
+        <Providers>
+          <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <main>
+              {children}
+            </main>
+          </div>
+        </Providers>
       </body>
     </html>
   );
