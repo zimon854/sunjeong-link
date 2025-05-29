@@ -1,4 +1,5 @@
 import Credentials from "next-auth/providers/credentials";
+import type { AuthOptions } from "next-auth";
 // import GoogleProvider from "next-auth/providers/google";
 // import KakaoProvider from "next-auth/providers/kakao";
 
@@ -14,7 +15,7 @@ interface CredentialsAuth {
   password: string;
 }
 
-export const authConfig = {
+export const authConfig: AuthOptions = {
   providers: [
     Credentials({
       name: "credentials",
