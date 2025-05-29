@@ -110,7 +110,7 @@ export default function HomePage() {
           transition={{ delay: 1, duration: 0.8 }}
           className="absolute bottom-8 left-0 right-0 text-center text-white/80 text-sm"
         >
-          © 2024 선정링크. All rights reserved.
+          © 2025 선정링크. All rights reserved.
         </motion.div>
       </div>
     </div>
