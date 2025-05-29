@@ -74,7 +74,7 @@ export function Filters({ onFilterChange }: FiltersProps) {
           <Calendar
             mode="single"
             selected={filters.startDate}
-            onSelect={(date) => handleDateChange(date, 'start')}
+            onSelect={(date: Date | null) => handleDateChange(date, 'start')}
             initialFocus
           />
         </PopoverContent>
@@ -98,7 +98,7 @@ export function Filters({ onFilterChange }: FiltersProps) {
           <Calendar
             mode="single"
             selected={filters.endDate}
-            onSelect={(date) => handleDateChange(date, 'end')}
+            onSelect={(date: Date | null) => handleDateChange(date, 'end')}
             initialFocus
           />
         </PopoverContent>
