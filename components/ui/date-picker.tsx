@@ -44,9 +44,10 @@ export function DatePicker({
         <Calendar
           mode="single"
           selected={date || undefined}
-          onSelect={setDate}
+          onSelect={(d: Date | undefined) => setDate(d ?? null)}
           initialFocus
           locale={ko}
+          required={false}
         />
       </PopoverContent>
     </Popover>
