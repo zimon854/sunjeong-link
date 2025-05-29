@@ -73,9 +73,10 @@ export function Filters({ onFilterChange }: FiltersProps) {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={filters.startDate}
-            onSelect={(date: Date | null) => handleDateChange(date, 'start')}
+            selected={filters.startDate ?? undefined}
+            onSelect={(date: Date | undefined) => handleDateChange(date ?? null, 'start')}
             initialFocus
+            required={false}
           />
         </PopoverContent>
       </Popover>
@@ -97,9 +98,10 @@ export function Filters({ onFilterChange }: FiltersProps) {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={filters.endDate}
-            onSelect={(date: Date | null) => handleDateChange(date, 'end')}
+            selected={filters.endDate ?? undefined}
+            onSelect={(date: Date | undefined) => handleDateChange(date ?? null, 'end')}
             initialFocus
+            required={false}
           />
         </PopoverContent>
       </Popover>
